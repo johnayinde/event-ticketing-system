@@ -182,7 +182,9 @@ describe("API Integration Tests", () => {
     });
 
     it("should handle non-existent event", async () => {
-      const response = await request(app).get("/status/fake-id-32-3-23mfkf");
+      const response = await request(app).get(
+        "/status/89ca92a7-7ef3-4b20-9958-a08b1d2be25b"
+      );
 
       expect(response.status).toBe(500);
     });
