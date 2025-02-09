@@ -1,0 +1,68 @@
+{
+    "tables": {
+        "events": {
+            "tableName": "events",
+            "indexes": []
+        },
+        "tickets": {
+            "tableName": "tickets",
+            "indexes": {
+                "1b67c71b860b664595df06f4cfec9eb1550a6c09": {
+                    "fields": [
+                        "eventId"
+                    ],
+                    "name": "tickets_event_id",
+                    "options": {
+                        "indexName": "tickets_event_id"
+                    }
+                },
+                "a19e8e166fdb3acb28de45147c187086134a60b8": {
+                    "fields": [
+                        "userId"
+                    ],
+                    "name": "tickets_user_id",
+                    "options": {
+                        "indexName": "tickets_user_id"
+                    }
+                },
+                "e24e5b928b409e36da500bc507bf2cf07d836a93": {
+                    "fields": [
+                        "status"
+                    ],
+                    "name": "tickets_status",
+                    "options": {
+                        "indexName": "tickets_status"
+                    }
+                }
+            }
+        },
+        "users": {
+            "tableName": "users",
+            "indexes": []
+        },
+        "waiting_lists": {
+            "tableName": "waiting_lists",
+            "indexes": {
+                "ee1b1f29f092119edaf600aa1165f1b5bf0c1816": {
+                    "fields": [
+                        "eventId"
+                    ],
+                    "name": "waiting_lists_event_id",
+                    "options": {
+                        "indexName": "waiting_lists_event_id"
+                    }
+                },
+                "15623a376c21cafe80261a65f185037721aa4ec0": {
+                    "fields": [
+                        "position"
+                    ],
+                    "name": "waiting_lists_position",
+                    "options": {
+                        "indexName": "waiting_lists_position"
+                    }
+                }
+            }
+        }
+    },
+    "revision": 1
+}
