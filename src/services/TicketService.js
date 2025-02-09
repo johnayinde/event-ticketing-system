@@ -5,7 +5,7 @@ class TicketService {
     this.models = models;
   }
 
-  async bookTicket(eventId, identifier, quantity = 1) {
+  async bookTicket(eventId, identifier, quantity = 1, retryCount = 3) {
     const transaction = await this.models.sequelize.transaction({
       isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
     });
@@ -14,7 +14,6 @@ class TicketService {
       const [user] = await this.models.User.findOrCreate({
         where: { identifier },
         transaction,
-        lock: true,
       });
 
       const event = await this.models.Event.findByPk(eventId, {
@@ -23,10 +22,6 @@ class TicketService {
       });
 
       if (!event) throw new Error("Event not found");
-
-      // if (event.availableTickets < quantity) {
-      //   throw new Error("Not enough tickets available");
-      // }
 
       const tickets = [];
       if (event.availableTickets >= quantity) {
@@ -62,15 +57,19 @@ class TicketService {
       }
     } catch (error) {
       await transaction.rollback();
+
+      // addd Retry on deadlock erro rwith 100ms delay between retries
+      if (error.message.includes("Deadlock") && retryCount > 0) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        return this.bookTicket(eventId, identifier, quantity, retryCount - 1);
+      }
+
       throw error;
     }
   }
-
   async cancelTicket(eventId, identifier) {
     const transaction = await this.models.sequelize.transaction();
     try {
-      console.log({ eventId, identifier });
-
       const user = await this.models.User.findOne({
         where: { identifier },
         transaction,
